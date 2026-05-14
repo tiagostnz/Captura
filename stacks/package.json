@@ -1,5 +1,5 @@
 {
-  "name": "instagram2",
+  "name": "insagram2",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,11 +15,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.20",
-    "dotenv": "^17.4.2",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.2.10",
     "lucide-react": "^1.14.0",
-    "next": "^16.2.6",
+    "next": "16.2.4",
     "next-auth": "^4.24.14",
     "pg": "^8.20.0",
     "react": "19.2.4",
@@ -32,14 +31,9 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "25.8.0",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "jest": "^30.3.0",
-    "tailwindcss": "^4",
-    "tsx": "^4.22.0",
-    "typescript": "5.9.3"
+    "tailwindcss": "^4"
   }
 }

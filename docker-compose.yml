@@ -1,0 +1,32 @@
+# serve para listar os containers que esse arquivo controla
+services:
+# é o nome do container, pode ser qualquer um
+  db:
+    image: postgres:16-alpine
+    # nome fixo do container (sem isso o Docker cria um nome aleatório)
+    container_name: instagram2-db
+    #sobe sozinho, se cair ou reiniciar o computador, só para com comando docker-compose down
+    restart: unless-stopped
+   # cria um usuário com senha e um banco de dados
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: instagram2
+    # são as portas: porta do host:porta do container. 
+    ports:
+      - "5432:5432"
+    # monta o volume "pgdata" onde o postgres guarda os dados
+    #sem isso, caso o container for destruido, todo o banco sumiria junto
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      #verifica a sáude do container, ele roda "pg__isready" a cada 5 segundos, se falhar 10 vezes, o container é considerado "unhealthy"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d instagram2"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+# é só uma declaração dos volumes. sem isso o docker n sabe criá-los
+volumes:
+  pgdata:
+
+# to usando os comentarios para me lembrar do que cada parte do código faz
