@@ -1,12 +1,7 @@
-import { db } from "@/lib/db";
-
-export default async function Home() {
-  const users = await db("users").select("*");
-
+export default function Login() {
   return (
     <div>
-      <h1>Usuários no banco:</h1>
-      <pre>{JSON.stringify(users, null, 2)}</pre>
+      <h1>Login</h1>
     </div>
   );
 }
