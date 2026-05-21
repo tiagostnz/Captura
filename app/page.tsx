@@ -1,8 +1,12 @@
-export default function Home() {
-  const MeuNome = "Tiago";
+import { db } from "@/lib/db";
+
+export default async function Home() {
+  const users = await db("users").select("*");
+
   return (
     <div>
-      <h1>{MeuNome}</h1>
+      <h1>Usuários no banco:</h1>
+      <pre>{JSON.stringify(users, null, 2)}</pre>
     </div>
   );
 }
