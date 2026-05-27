@@ -2,10 +2,15 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
+import Google from "next-auth/providers/google";
 
 // esse bloco chama a função NextAuth que devolve um objeto com 4 funções e exporta todas de uma vez usando destructuring assignment, ou seja, pega as 4 funções do objeto e exporta cada uma com seu nome, pra usar em outras partes do app
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+    }),
     Credentials({
   credentials: {
     email: {},
