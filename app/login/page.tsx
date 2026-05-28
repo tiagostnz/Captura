@@ -19,6 +19,11 @@ async function login(formData: FormData) {
   }
 }
 
+async function loginGoogle() {
+  "use server";
+  await signIn("google", { redirectTo: "/" });
+}
+
 export default async function LoginPage({
   searchParams,
 }: {
@@ -38,6 +43,10 @@ export default async function LoginPage({
         <input name="email" type="email" placeholder="Email" required />
         <input name="password" type="password" placeholder="Senha" required />
         <button type="submit">Entrar</button>
+      </form>
+
+      <form action={loginGoogle}>
+        <button type="submit">Entrar com Google</button>
       </form>
     </div>
   );
