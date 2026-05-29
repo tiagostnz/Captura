@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Instagram2",
+  title: "Captura",
   description: "",
 };
 
