@@ -12,20 +12,39 @@ async function signup(formData: FormData) {
 
   const password_hash = await bcrypt.hash(password, 10);
 
-  await db("users").insert({
-    name,
-    username,
-    email,
-    password_hash,
-  });
+  try {
+    await db("users").insert({
+      name,
+      username,
+      email,
+      password_hash,
+    });
+  } catch (error) {
+    const code = (error as { code?: string }).code;
+    if (code === "23505") {
+      redirect("/signup?error=duplicado");
+    }
+
+    throw error;
+  }
 
   redirect("/login");
 }
 
-export default function SignupPage() {
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
+  
   return (
     <div>
       <h1>Criar conta</h1>
+
+      {params.error === "duplicado" && (
+        <p style={{ color: "red" }}>Esse email ou username já está em uso.</p>
+      )}
       <form action={signup}>
         <input name="name" placeholder="Nome" required />
         <input name="username" placeholder="@username" required />
