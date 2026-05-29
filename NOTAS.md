@@ -16,3 +16,8 @@ next-auth:
 - tem um sistema de Autenticação VS Autorização - o Auth cuida da autenticação, e as permissões é o adm que define
 - quando um usuário loga, o servidor cria uma sessão e devolve no cookie, então, cada request seguinte, o navegador manda esse cookie de volta 
 
+zod:
+- ele serve pra validar dados, então, conferir se o que chegou tá no formato que eu defini antes de ser usado( se a senha tem 6 caracteres por exemplo)
+- eu escrevo um schema, que é só a descrição das regras de cada campo, tipo um molde
+- usei o .safeParse(dados) pq se der erro, ele não quebra, só devolve o erro
+
