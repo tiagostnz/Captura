@@ -9,6 +9,7 @@ async function logout() {
   "use server";
   await signOut({ redirectTo: "/login" });
 }
+
 async function toggleLike(formData: FormData) {
   "use server";
 
@@ -59,21 +60,56 @@ async function addComment(formData: FormData) {
   revalidatePath("/");
 }
 
+async function toggleFollow(formData: FormData) {
+  "use server";
+
+  const session = await auth();
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
+
+  const me = await db("users").where({ email: session.user.email }).first();
+  const followingId = Number(formData.get("following_id"));
+
+  // não dá pra seguir a si mesmo
+  if (followingId === me.id) {
+    return;
+  }
+
+  const existing = await db("follows")
+    .where({ follower_id: me.id, following_id: followingId })
+    .first();
+
+  if (existing) {
+    await db("follows").where({ id: existing.id }).del();
+  } else {
+    await db("follows").insert({ follower_id: me.id, following_id: followingId });
+  }
+
+  revalidatePath("/");
+}
+
 export default async function Home() {
   const session = await auth();
 
-  // quem sou eu? (pra saber quais posts já curti)
+  // quem sou eu? (pra saber o que já curti/sigo)
   const me = session?.user?.email
     ? await db("users").where({ email: session.user.email }).first()
     : null;
 
-  // feed: posts + username + contagem de likes
+  // feed: posts + username + id do autor + contagem de likes
   const posts = await db("posts")
     .join("users", "posts.user_id", "users.id")
     .leftJoin("likes", "likes.post_id", "posts.id")
-    .select("posts.id", "posts.image_url", "posts.caption", "users.username")
+    .select(
+      "posts.id",
+      "posts.image_url",
+      "posts.caption",
+      "users.username",
+      "users.id as author_id"
+    )
     .count("likes.id as likes_count")
-    .groupBy("posts.id", "users.username")
+    .groupBy("posts.id", "users.username", "users.id")
     .orderBy("posts.created_at", "desc");
 
   // ids dos posts que eu curti
@@ -86,6 +122,11 @@ export default async function Home() {
     .join("users", "comments.user_id", "users.id")
     .select("comments.id", "comments.post_id", "comments.content", "users.username")
     .orderBy("comments.created_at", "asc");
+
+  // ids das pessoas que eu sigo
+  const myFollowingIds = me
+    ? await db("follows").where({ follower_id: me.id }).pluck("following_id")
+    : [];
 
   return (
     <div className="min-h-screen bg-gray-50 py-6">
@@ -115,6 +156,16 @@ export default async function Home() {
                 {post.username[0].toUpperCase()}
               </div>
               <span className="font-semibold text-sm">{post.username}</span>
+
+              {/* botão seguir — só aparece se NÃO for o meu próprio post */}
+              {me && post.author_id !== me.id && (
+                <form action={toggleFollow} className="ml-auto">
+                  <input type="hidden" name="following_id" value={post.author_id} />
+                  <button type="submit" className="text-blue-500 text-sm font-semibold">
+                    {myFollowingIds.includes(post.author_id) ? "Seguindo" : "Seguir"}
+                  </button>
+                </form>
+              )}
             </div>
 
             <img src={post.image_url} alt={post.caption} className="w-full" />

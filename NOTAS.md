@@ -25,3 +25,7 @@ likes:
 - like é uma linha numa tabela de ligação, curtir cria a linha e descutir apaga
 - o número é só uma contagem dessas linhas
 - vou adicionar uma forma que fique melhor e mais completa dps
+comentários:
+- é basicamente a mesma coisa
+- cria e apaga, e uma lista do que e u ja fiz pra decidir oq mostrar
+-esse mesmo padrão se aplica tbm pros follows
