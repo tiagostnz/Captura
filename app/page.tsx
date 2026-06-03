@@ -1,5 +1,7 @@
 import { auth, signOut } from "@/auth";
 import { db } from "@/lib/db";
+import Link from "next/link";
+
 
 async function logout() {
   "use server";
@@ -21,7 +23,10 @@ export default async function Home() {
       <div className="max-w-md mx-auto mb-6 flex justify-between items-center text-sm">
         {session ? (
           <>
+           <div className="flex items-center gap-4">
+              <a href="/new" className="font-semibold">＋ Novo post</a>
             <span>Logado como: {session.user?.name}</span>
+            </div>
             <form action={logout}>
               <button type="submit" className="text-blue-500">Sair</button>
             </form>
