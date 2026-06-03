@@ -32,6 +32,33 @@ async function toggleLike(formData: FormData) {
 
   revalidatePath("/");
 }
+
+async function addComment(formData: FormData) {
+  "use server";
+
+  const session = await auth();
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
+
+  const me = await db("users").where({ email: session.user.email }).first();
+  const postId = Number(formData.get("post_id"));
+  const content = (formData.get("content") as string)?.trim();
+
+  // comentário vazio? não faz nada
+  if (!content) {
+    return;
+  }
+
+  await db("comments").insert({
+    user_id: me.id,
+    post_id: postId,
+    content,
+  });
+
+  revalidatePath("/");
+}
+
 export default async function Home() {
   const session = await auth();
 
@@ -53,6 +80,12 @@ export default async function Home() {
   const myLikedPostIds = me
     ? await db("likes").where({ user_id: me.id }).pluck("post_id")
     : [];
+
+  // todos os comentários (com o username de quem comentou)
+  const comments = await db("comments")
+    .join("users", "comments.user_id", "users.id")
+    .select("comments.id", "comments.post_id", "comments.content", "users.username")
+    .orderBy("comments.created_at", "asc");
 
   return (
     <div className="min-h-screen bg-gray-50 py-6">
@@ -97,9 +130,33 @@ export default async function Home() {
               <p className="text-sm font-semibold mt-1">{post.likes_count} curtidas</p>
             </div>
 
-            <div className="p-3 text-sm">
+            <div className="px-3 pt-3 text-sm">
               <span className="font-semibold mr-2">{post.username}</span>
               {post.caption}
+            </div>
+
+            {/* comentários */}
+            <div className="px-3 py-3 text-sm">
+              {comments
+                .filter((c) => c.post_id === post.id)
+                .map((c) => (
+                  <p key={c.id}>
+                    <span className="font-semibold mr-2">{c.username}</span>
+                    {c.content}
+                  </p>
+                ))}
+
+              <form action={addComment} className="flex gap-2 mt-2">
+                <input type="hidden" name="post_id" value={post.id} />
+                <input
+                  name="content"
+                  placeholder="Adicione um comentário..."
+                  className="flex-1 border rounded p-1"
+                />
+                <button type="submit" className="text-blue-500 font-semibold">
+                  Publicar
+                </button>
+              </form>
             </div>
           </div>
         ))}

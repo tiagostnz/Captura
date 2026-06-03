@@ -21,3 +21,7 @@ zod:
 - eu escrevo um schema, que é só a descrição das regras de cada campo, tipo um molde
 - usei o .safeParse(dados) pq se der erro, ele não quebra, só devolve o erro
 
+likes:
+- like é uma linha numa tabela de ligação, curtir cria a linha e descutir apaga
+- o número é só uma contagem dessas linhas
+- vou adicionar uma forma que fique melhor e mais completa dps
