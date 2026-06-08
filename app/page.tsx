@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { toggleFollow } from "./actions";
 
 
 async function logout() {
@@ -56,35 +57,6 @@ async function addComment(formData: FormData) {
     post_id: postId,
     content,
   });
-
-  revalidatePath("/");
-}
-
-async function toggleFollow(formData: FormData) {
-  "use server";
-
-  const session = await auth();
-  if (!session?.user?.email) {
-    redirect("/login");
-  }
-
-  const me = await db("users").where({ email: session.user.email }).first();
-  const followingId = Number(formData.get("following_id"));
-
-  // não dá pra seguir a si mesmo
-  if (followingId === me.id) {
-    return;
-  }
-
-  const existing = await db("follows")
-    .where({ follower_id: me.id, following_id: followingId })
-    .first();
-
-  if (existing) {
-    await db("follows").where({ id: existing.id }).del();
-  } else {
-    await db("follows").insert({ follower_id: me.id, following_id: followingId });
-  }
 
   revalidatePath("/");
 }
@@ -155,7 +127,12 @@ export default async function Home() {
               <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold">
                 {post.username[0].toUpperCase()}
               </div>
-              <span className="font-semibold text-sm">{post.username}</span>
+              <Link
+                href={`/perfil/${post.username}`}
+                className="font-semibold text-sm hover:underline"
+              >
+                {post.username}
+              </Link>
 
               {/* botão seguir — só aparece se NÃO for o meu próprio post */}
               {me && post.author_id !== me.id && (
