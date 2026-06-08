@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 // @ts-ignore
 import "./globals.css";
+import BottomNav from "./components/BottomNav";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +26,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+           <body className="min-h-full flex flex-col pb-16">
+        {children}
+        <BottomNav />
+      </body>
+
     </html>
   );
 }
