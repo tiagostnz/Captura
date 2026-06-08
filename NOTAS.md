@@ -29,3 +29,9 @@ comentários:
 - é basicamente a mesma coisa
 - cria e apaga, e uma lista do que e u ja fiz pra decidir oq mostrar
 -esse mesmo padrão se aplica tbm pros follows
+
+perfil:
+-criei toda a parte de perfil do usuário,
+
+armazenamento de arquivos de posts:
+- optei por usar um serviço de nuvem, pelo que pesquisei é o jeito real de produção, então acho melhor usar ele

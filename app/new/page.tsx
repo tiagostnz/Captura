@@ -2,14 +2,11 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 import Link from "next/link";
+import { cloudinary } from "@/lib/cloudinary";
 
 
-const postSchema = z.object({
-  image_url: z.url("Cole um link de imagem válido"),
-  caption: z.string().max(2200, "Legenda muito longa"),
-});
+
 
 async function createPost(formData: FormData) {
   "use server";
@@ -20,23 +17,34 @@ async function createPost(formData: FormData) {
     redirect("/login");
   }
 
-  // valida o que veio do form
-  const result = postSchema.safeParse({
-    image_url: formData.get("image_url"),
-    caption: formData.get("caption"),
-  });
-  if (!result.success) {
+  // pega o ARQUIVO e a legenda do formulário
+  const file = formData.get("image") as File;
+  const caption = (formData.get("caption") as string)?.trim() ?? "";
+
+  // valida: tem arquivo? é imagem? (segurança — nunca confiar no upload)
+  if (!file || file.size === 0) {
+    redirect("/new?error=1");
+  }
+  if (!file.type.startsWith("image/")) {
     redirect("/new?error=1");
   }
 
-  // acha o id do usuário logado pelo email
-  const user = await db("users").where({ email: session.user.email }).first();
+  // converte o arquivo num formato que o Cloudinary aceita (data URI base64)
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  const dataUri = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-  // insere o post atribuído a esse usuário
+  // sobe pro Cloudinary e pega a URL pública da imagem
+  const result = await cloudinary.uploader.upload(dataUri, {
+    folder: "captura",
+  });
+
+  // acha o id do usuário logado e salva o post com a URL do Cloudinary
+  const user = await db("users").where({ email: session.user.email }).first();
   await db("posts").insert({
     user_id: user.id,
-    image_url: result.data.image_url,
-    caption: result.data.caption,
+    image_url: result.secure_url,
+    caption,
   });
 
   // avisa o Next que a home mudou, e volta pro feed
@@ -56,13 +64,14 @@ export default async function NewPostPage({
       <h1 className="text-xl font-bold mb-4">Novo post</h1>
 
       {params.error && (
-        <p className="text-red-500 mb-2">Cole um link de imagem válido.</p>
+        <p className="text-red-500 mb-2">Escolha um arquivo de imagem válido.</p>
       )}
 
       <form action={createPost} className="flex flex-col gap-3">
         <input
-          name="image_url"
-          placeholder="URL da imagem (https://...)"
+          type="file"
+          name="image"
+          accept="image/*"
           required
           className="border p-2 rounded"
         />
