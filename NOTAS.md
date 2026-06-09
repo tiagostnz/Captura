@@ -35,3 +35,13 @@ perfil:
 
 armazenamento de arquivos de posts:
 - optei por usar um serviço de nuvem, pelo que pesquisei é o jeito real de produção, então acho melhor usar ele
+
+laboratório de credentials:
+- criei um laboratório que vai ser apagado mas vou explicando oq vou testando.
+SQL INJECTION:
+- primeiro comecei com SQL injection, que, quando vc digita um email qualquer com uma senha tipo ' OR '1'+'1 fecha a string da senha, e o resto vira comando SQL de vdd, n mais um dado, logo o banco devolve todos os usuários (a query pega o primeiro) e o código interpreta o login deu certo (pelo que entendi o knex protege isso mas é sempre bom saber)
+- então a solução disso seria separar os dois, aientra a query parametrizada, no caso, quando vc manda algo pro banco, em vez dele analisar tudo, ele só vai procurar alguma senha que seja igual ao que vc mandou, ent tira a possibilidade dele executar aquilo como SQL
+HASH DE SENHAS:
+- pelo que eu entendi nunca guarda a senha real no banco, pq se o banco vazar, todas as senhas seriam expostas. em vez disso guarda um "hash" que basicamente é um embaralhamento de mão unica, isso significa que é facil ir senha e voltar senha, mas o hash é praticamente impossivel voltar hash
+- outra coisa que entendi é que usamos o bcrypt pq ele joga um valor aleatório em cada hash, ent 2 usuários com as mesmas senhas tem hashes diferentes, isso quebra um negocio chamado "raimbow tables" que são tabelas absurdamente grandes de hashes pré caluculados, e esconde quem usa a mesma senha.
+-além do fato que ele é lento de propósito, ao modo de, 1 login n da pra sentir, mas se uma pessoa tentar bilhões de senha ao mesmo tempo, fica lento dms pra valer a pena
