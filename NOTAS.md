@@ -45,3 +45,22 @@ HASH DE SENHAS:
 - pelo que eu entendi nunca guarda a senha real no banco, pq se o banco vazar, todas as senhas seriam expostas. em vez disso guarda um "hash" que basicamente é um embaralhamento de mão unica, isso significa que é facil ir senha e voltar senha, mas o hash é praticamente impossivel voltar hash
 - outra coisa que entendi é que usamos o bcrypt pq ele joga um valor aleatório em cada hash, ent 2 usuários com as mesmas senhas tem hashes diferentes, isso quebra um negocio chamado "raimbow tables" que são tabelas absurdamente grandes de hashes pré caluculados, e esconde quem usa a mesma senha.
 -além do fato que ele é lento de propósito, ao modo de, 1 login n da pra sentir, mas se uma pessoa tentar bilhões de senha ao mesmo tempo, fica lento dms pra valer a pena
+ENUMERAÇÃO POR MENSAGEM:
+- isso é algo tão comum que quase pessa imperceptivel, se toda vez que vc tentar fazer login dissesse "esse email não existe" e em outro momento passasse para senha incorreta", um atacante digitaria uma lista de emails e descobriria quais estão cadastrados no site, e dps fazer o phishing, testar senhas vazadas de outro site e etc
+- n tem mto Uma forma certa de se defender, mas a melhor opção seria colocando uma mensagem genérica
+ENUMERAÇÃO POR TEMPO
+- aqui ta uma coisa mto sutil, mesmo com uma mensagem genérica, o tempo de resposta entrega oq n deveria entregar.
+- se o email n existir ele cai no if !(user) e responde na hora, então acontece de não rodar o bcrypt, logo entrega uma resposta rápida
+- mas caso o email exista mas a senha está errada, ele roda o bcrypt.compare, que é lento de propósito, e dá pra identificar se o email colocado está certo ou n, então um atacante mede o tempo de respostas e conclui oq ta no banco e oq não está.
+- a defesa seria comparar sempre (hash fantasma) pra nivelar o tempo
+TENTATIVAS INFINITAS:
+- esse é um dos mais simples, basicamente se um site deixa tentar quantas senhas quiser até acertar, mesmo possuindo o bcrypt, abre 2 tipos de ataques:
+- a força bruta que a pessoa tentaria diversas vezes até acertar
+- credential stuffing que ela pegaria listas gigantes de email/senhas vazadas de outros sites e testa
+- a defesa seria limitar o numero de tentativas de um usuário, por exemplo 10 vezes em uma janela de 2 minutos, assim tira a possibilidade de adivinhar
+- normalmente sistemas reais combinam IP + conta + capcha, pra evitar travar a conta de uma vitima de proposito, para ela não ter a possibilidade de entrar, e mudar a senha e etc
+SESSÃO E COOKIES:
+- cada requisição que o navegador faz é independente, logo o servidor não lembra de nada da requisicão anterior, então pra isso serve o cookie, que é nada mais que um crachá que o navegador guarda e reenvia na sua requisição seguite, toda segurança gira em torno de proteger o cookie
+- token imprevisível/assinado > basicamente um atacante n consegue inventar um cookie valido
+-AUTTH_SECRET > o cookie possui um conteudo oculto, que caso seja alterado, a assinatura quebra e o servidor rejeitaz
+- httpOnly > o javascript da pagina n consegue ler o cookie, então, mesmo que injetem um script malicioso, não conseguem acessar o cookie
