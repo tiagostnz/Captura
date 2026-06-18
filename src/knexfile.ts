@@ -9,7 +9,7 @@ const config: { [key: string]: Knex.Config } = {
         client: "pg",
         connection: process.env.DATABASE_URL,
         migrations: {
-            directory: "./lib/db/migrations",
+            directory: "./src/lib/db/migrations",
             extension: "ts",
         },
 
