@@ -1,9 +1,11 @@
 "use client";
 
 import { usePosts } from "@/hooks/usePosts";
+import { useToggleLike } from "@/hooks/useToggleLike";
 
 export default function PostsFeed() {
   const { data: posts, isLoading, error } = usePosts();
+  const { mutate: toggleLike } = useToggleLike();
 
   if (isLoading) return <p className="text-center">Carregando...</p>;
   if (error) return <p className="text-center text-red-500">Deu erro 😕</p>;
@@ -18,8 +20,21 @@ export default function PostsFeed() {
             </div>
             <span className="font-semibold text-sm">{post.username}</span>
           </div>
+
           <img src={post.image_url} alt={post.caption} className="w-full" />
-          <div className="p-3 text-sm">
+
+          {/* coração + contagem */}
+          <div className="px-3 pt-3">
+            <button
+              onClick={() => toggleLike(post.id)}
+              className="text-2xl leading-none"
+            >
+              {post.liked_by_me ? "❤️" : "🤍"}
+            </button>
+            <p className="text-sm font-semibold mt-1">{post.likes_count} curtidas</p>
+          </div>
+
+          <div className="px-3 pt-3 pb-3 text-sm">
             <span className="font-semibold mr-2">{post.username}</span>
             {post.caption}
           </div>
