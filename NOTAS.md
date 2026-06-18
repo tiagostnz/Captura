@@ -64,3 +64,44 @@ SESSÃO E COOKIES:
 - token imprevisível/assinado > basicamente um atacante n consegue inventar um cookie valido
 -AUTTH_SECRET > o cookie possui um conteudo oculto, que caso seja alterado, a assinatura quebra e o servidor rejeitaz
 - httpOnly > o javascript da pagina n consegue ler o cookie, então, mesmo que injetem um script malicioso, não conseguem acessar o cookie
+
+depois dessa parte feita tive uma reunião com o caio que me pediu algumas coisas
+
+MUDANÇA PRINCIPAL:
+Hoje o captura pega os dados do banco dentro da página, então seria melhor separar em duas partes
+- backend que só busca dados e devolve
+- frontend é só a parte visual que pede esses dados pro back e mostra
+é melhor separar pq assim o back serve pra qualquer tela, então se é um site agr dps pode virar um aplicativo
+
+PASTA SRC:
+juntar todo o código do app numa pasta só, e deixar os arquivos de configuração na raiz, é melhor pq separa a parte do que eu progamo do que eu configuro do projeto, fica mais fácil de achar as coisas
+
+API REST: 
+São arquivos que não mostram tela, eles só recebem um pedido e devolvem dados em formato JSON.
+
+"USE CLIENT":
+é basicamente uma marca no topo do arquivo que diz um "isso roda no navegador", ele é usado pq só dá pra usar algumas ferramentas no navegador, tipo os hooks ou o useQuery. As páginas do Next rodam direto no servidor
+
+componente nçao pode ser "async:
+quando a parte roda no navegador, ele n pode ficar esperando os dados com um async/await. Em vez disso, ele pede os dados e segue. Quem cuida de esperar e avisar quando chega é o useQuery
+
+FETCH: 
+É o comando que o front usa pra pedir os dados pro back
+antes ele pegava do banco direto, agora pede pela internet
+
+USEQUERY:
+é a ferramenta que cuida de buscar os dados no navegador e volta 3 coisas:
+-isLoading: true enquanto tá buscando (mostra "carregando...)
+- error: se deu erro (e mostra a mensagem de erro)
+- data: quando os dados chegam( mostra na tela)
+eu só digo o nome do dado e como buscar, ela guarda o que já buscou, pra não pedir a mesma coisa toda hora, sem ela, eu teria que controlar esses 3 estados na mão 
+
+PROVIDER:
+o useQuery precisa estar ligado pra funcionar. O provider é uma coisa que eu coloco uma vez no layout, e a partir daí o useQuery funciona em qualquer parte. Sem ele ligado o useQuery n funciona
+
+CUSTOM HOOK: é uma função que junta a lógica de buscar uma coisa com um nome fácil em vez de repetir o useQuery + fetch em todo componente que precisa de posts, eu escrevo isso uma vez dentro do usePosts, e os componentes só chamam ele, ai se eu precisar mudar como busco, mudo num lugar só
+
+-> O CAMINHO QUE UM DADO FAZ AGORA:
+a pagina chama o usePosts -> que usa o useQuery -> que faz o fetch pro endereço /api/posts -> o arquivo do route.ts pega no banco e devolve os dados -> a tela recebe e mostra
+
+to fazendo isso em outra branch, algumas funcões principais sumiram do feed principal por enquanto, pq dps vão voltar como APIs próprias
