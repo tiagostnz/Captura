@@ -3,14 +3,16 @@
 import { usePosts } from "@/hooks/usePosts";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
+import { useToggleFollow } from "@/hooks/useToggleFollow";
 
 export default function PostsFeed() {
   const { data: posts, isLoading, error } = usePosts();
   const { mutate: toggleLike } = useToggleLike();
   const { mutate: addComment } = useAddComment();
+  const { mutate: toggleFollow } = useToggleFollow();
 
   if (isLoading) return <p className="text-center">Carregando...</p>;
-  if (error) return <p className="text-center text-red-500">Deu erro 😕</p>;
+  if (error) return <p className="text-center text-red-500">Deu erro </p>;
 
   return (
     <div className="max-w-md mx-auto flex flex-col gap-6">
@@ -21,6 +23,16 @@ export default function PostsFeed() {
               {post.username[0].toUpperCase()}
             </div>
             <span className="font-semibold text-sm">{post.username}</span>
+
+            {/* botão seguir — escondido nos meus próprios posts */}
+            {!post.is_mine && (
+              <button
+                onClick={() => toggleFollow(post.author_id)}
+                className="ml-auto text-blue-500 text-sm font-semibold"
+              >
+                {post.following_author ? "Seguindo" : "Seguir"}
+              </button>
+            )}
           </div>
 
           <img src={post.image_url} alt={post.caption} className="w-full" />

@@ -26,6 +26,11 @@ export async function GET() {
     ? await db("likes").where("user_id", me.id).pluck("post_id")
     : [];
 
+    // ids das pessoas que EU sigo
+    const myFollowingIds = me
+      ? await db("follows").where({ follower_id: me.id }).pluck("following_id")
+      : [];
+
     // todos os comentários, com o username de quem comentou
     const comments = await db("comments")
       .join("users", "comments.user_id", "users.id")
@@ -37,6 +42,8 @@ export async function GET() {
         ...post,
         liked_by_me: myLikedPostsId.includes(post.id),
         comments: comments.filter((c) => c.post_id === post.id),
+        following_author: myFollowingIds.includes(post.author_id),
+        is_mine: me ? post.author_id === me.id : false,
     }));
     // transforma a lista nun json de resposta http
     return NextResponse.json(postsFinal);
