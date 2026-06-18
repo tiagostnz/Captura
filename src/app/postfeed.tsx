@@ -2,10 +2,12 @@
 
 import { usePosts } from "@/hooks/usePosts";
 import { useToggleLike } from "@/hooks/useToggleLike";
+import { useAddComment } from "@/hooks/useAddComment";
 
 export default function PostsFeed() {
   const { data: posts, isLoading, error } = usePosts();
   const { mutate: toggleLike } = useToggleLike();
+  const { mutate: addComment } = useAddComment();
 
   if (isLoading) return <p className="text-center">Carregando...</p>;
   if (error) return <p className="text-center text-red-500">Deu erro 😕</p>;
@@ -34,9 +36,41 @@ export default function PostsFeed() {
             <p className="text-sm font-semibold mt-1">{post.likes_count} curtidas</p>
           </div>
 
-          <div className="px-3 pt-3 pb-3 text-sm">
+          {/* legenda */}
+          <div className="px-3 pt-3 text-sm">
             <span className="font-semibold mr-2">{post.username}</span>
             {post.caption}
+          </div>
+
+          {/* comentários */}
+          <div className="px-3 py-3 text-sm">
+            {post.comments.map((c: any) => (
+              <p key={c.id}>
+                <span className="font-semibold mr-2">{c.username}</span>
+                {c.content}
+              </p>
+            ))}
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const content = String(new FormData(form).get("content") ?? "");
+                if (!content.trim()) return;
+                addComment({ postId: post.id, content });
+                form.reset();
+              }}
+              className="flex gap-2 mt-2"
+            >
+              <input
+                name="content"
+                placeholder="Adicione um comentário..."
+                className="flex-1 border rounded p-1"
+              />
+              <button type="submit" className="text-blue-500 font-semibold">
+                Publicar
+              </button>
+            </form>
           </div>
         </div>
       ))}

@@ -25,10 +25,19 @@ export async function GET() {
     const myLikedPostsId = me
     ? await db("likes").where("user_id", me.id).pluck("post_id")
     : [];
-    const postsComLike = posts.map((post) => ({
+
+    // todos os comentários, com o username de quem comentou
+    const comments = await db("comments")
+      .join("users", "comments.user_id", "users.id")
+      .select("comments.id", "comments.post_id", "comments.content", "users.username")
+      .orderBy("comments.created_at", "asc");
+
+    // monta cada post com: liked_by_me + a lista de comentários daquele post
+    const postsFinal = posts.map((post) => ({
         ...post,
         liked_by_me: myLikedPostsId.includes(post.id),
+        comments: comments.filter((c) => c.post_id === post.id),
     }));
     // transforma a lista nun json de resposta http
-    return NextResponse.json(postsComLike);
+    return NextResponse.json(postsFinal);
 }
