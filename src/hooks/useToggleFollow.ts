@@ -15,6 +15,7 @@ export function useToggleFollow() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] }); // invalida todos os perfis em cache, assim o contador de seguidores atualizam quando segue
     },
   });
 }

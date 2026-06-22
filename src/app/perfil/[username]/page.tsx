@@ -1,41 +1,22 @@
-import { auth } from "@/auth";
-import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
-import { toggleFollow } from "@/app/actions";
+"use client";
 
-export default async function PerfilPage({
+import { use } from "react";
+import { useProfile } from "@/hooks/useProfile";
+import { useToggleFollow } from "@/hooks/useToggleFollow";
+
+export default function PerfilPage({
   params,
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const { username } = await params;
+  const { username } = use(params); // "abre" a Promise do params no cliente
+  const { data, isLoading, error } = useProfile(username);
+  const { mutate: toggleFollow } = useToggleFollow();
 
-  const user = await db("users").where({ username }).first();
-  if (!user) {
-    notFound();
-  }
+  if (isLoading) return <p className="text-center py-6">Carregando...</p>;
+  if (error || !data) return <p className="text-center py-6">Perfil não encontrado.</p>;
 
-  // os posts desse usuário (mais novos primeiro)
-  const posts = await db("posts")
-    .where({ user_id: user.id })
-    .orderBy("created_at", "desc");
-
-  // contadores: quem segue ESTE perfil, e quem ESTE perfil segue
-  const followers = await db("follows").where({ following_id: user.id });
-  const following = await db("follows").where({ follower_id: user.id });
-
-  // quem está logado vendo o perfil?
-  const session = await auth();
-  const me = session?.user?.email
-    ? await db("users").where({ email: session.user.email }).first()
-    : null;
-
-  const isMe = !!me && me.id === user.id; // estou vendo meu próprio perfil?
-  const iFollow = me
-    ? !!(await db("follows")
-        .where({ follower_id: me.id, following_id: user.id })
-        .first())
-    : false;
+  const { user, posts, followersCount, followingCount, isMe, isFollowing } = data;
 
   return (
     <div className="max-w-md mx-auto py-6">
@@ -52,28 +33,25 @@ export default async function PerfilPage({
           {/* contadores */}
           <div className="flex gap-4 mt-2 text-sm">
             <span><strong>{posts.length}</strong> posts</span>
-            <span><strong>{followers.length}</strong> seguidores</span>
-            <span><strong>{following.length}</strong> seguindo</span>
+            <span><strong>{followersCount}</strong> seguidores</span>
+            <span><strong>{followingCount}</strong> seguindo</span>
           </div>
 
-          {/* botão seguir — só se eu estiver logado e não for meu perfil */}
-          {me && !isMe && (
-            <form action={toggleFollow} className="mt-2">
-              <input type="hidden" name="following_id" value={user.id} />
-              <button
-                type="submit"
-                className="text-sm font-semibold text-white bg-blue-500 px-4 py-1 rounded"
-              >
-                {iFollow ? "Seguindo" : "Seguir"}
-              </button>
-            </form>
+          {/* botão seguir — só se não for meu próprio perfil */}
+          {!isMe && (
+            <button
+              onClick={() => toggleFollow(user.id)}
+              className="mt-2 text-sm font-semibold text-white bg-blue-500 px-4 py-1 rounded"
+            >
+              {isFollowing ? "Seguindo" : "Seguir"}
+            </button>
           )}
         </div>
       </div>
 
-      {/* grade de posts (que nem no concorrente rs, 3 colunas) */}
+      {/* grade de posts (3 colunas) */}
       <div className="grid grid-cols-3 gap-1">
-        {posts.map((post) => (
+        {posts.map((post: any) => (
           <img
             key={post.id}
             src={post.image_url}
