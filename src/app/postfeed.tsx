@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Heart } from "lucide-react";
 import { usePosts } from "@/hooks/usePosts";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
@@ -40,11 +41,12 @@ export default function PostsFeed() {
 
           {/* coração + contagem */}
           <div className="px-3 pt-3">
-            <button
-              onClick={() => toggleLike(post.id)}
-              className="text-2xl leading-none"
-            >
-              {post.liked_by_me ? "❤️" : "🤍"}
+            <button onClick={() => toggleLike(post.id)} aria-label="Curtir">
+              <Heart
+                className={
+                  post.liked_by_me ? "w-6 h-6 fill-primary text-primary" : "w-6 h-6"
+                }
+              />
             </button>
             <p className="text-sm font-semibold mt-1">{post.likes_count} curtidas</p>
           </div>
