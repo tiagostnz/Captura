@@ -12,14 +12,14 @@ export default function PostsFeed() {
   const { mutate: toggleFollow } = useToggleFollow();
 
   if (isLoading) return <p className="text-center">Carregando...</p>;
-  if (error) return <p className="text-center text-red-500">Deu erro </p>;
+  if (error) return <p className="text-center text-destructive">Deu erro 😕</p>;
 
   return (
     <div className="max-w-md mx-auto flex flex-col gap-6">
       {posts.map((post: any) => (
-        <div key={post.id} className="border rounded-lg overflow-hidden bg-white">
+        <div key={post.id} className="border rounded-lg overflow-hidden bg-card">
           <div className="flex items-center gap-3 p-3">
-            <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold">
+            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm font-semibold">
               {post.username[0].toUpperCase()}
             </div>
             <span className="font-semibold text-sm">{post.username}</span>
@@ -28,7 +28,7 @@ export default function PostsFeed() {
             {!post.is_mine && (
               <button
                 onClick={() => toggleFollow(post.author_id)}
-                className="ml-auto text-blue-500 text-sm font-semibold"
+                className="ml-auto text-primary text-sm font-semibold"
               >
                 {post.following_author ? "Seguindo" : "Seguir"}
               </button>
@@ -79,7 +79,7 @@ export default function PostsFeed() {
                 placeholder="Adicione um comentário..."
                 className="flex-1 border rounded p-1"
               />
-              <button type="submit" className="text-blue-500 font-semibold">
+              <button type="submit" className="text-primary">
                 Publicar
               </button>
             </form>

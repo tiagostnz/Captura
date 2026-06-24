@@ -22,13 +22,13 @@ export default function PerfilPage({
     <div className="max-w-md mx-auto py-6">
       {/* cabeçalho do perfil */}
       <div className="flex items-center gap-4 mb-6 px-3">
-        <div className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center text-2xl font-semibold">
+        <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center text-2xl font-semibold">
           {user.username[0].toUpperCase()}
         </div>
         <div>
           <h1 className="text-xl font-bold">@{user.username}</h1>
           <p className="text-sm">{user.name}</p>
-          {user.bio && <p className="text-sm text-gray-600">{user.bio}</p>}
+          {user.bio && <p className="text-sm text-muted-foreground">{user.bio}</p>}
 
           {/* contadores */}
           <div className="flex gap-4 mt-2 text-sm">
@@ -41,7 +41,7 @@ export default function PerfilPage({
           {!isMe && (
             <button
               onClick={() => toggleFollow(user.id)}
-              className="mt-2 text-sm font-semibold text-white bg-blue-500 px-4 py-1 rounded"
+              className="mt-2 text-sm font-semibold text-primary-foreground bg-primary px-4 py-1 rounded"
             >
               {isFollowing ? "Seguindo" : "Seguir"}
             </button>

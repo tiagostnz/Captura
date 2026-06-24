@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import BottomNav from "./components/BottomNav";
 import { Providers } from "./providers";
+import Header from "./components/Header";
 
 
 
@@ -16,7 +17,7 @@ const louisGeorge = localFont({
 });
 
 const protest = localFont({
-  src: "./fonts/ProtestDemo.otf",
+  src: "./fonts/Protest.otf",
   variable: "--font-brand",
   display: "swap",
 });
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body className="min-h-full flex flex-col pb-16">
         <Providers>
+          <Header />
           {children}
           <BottomNav />
         </Providers>

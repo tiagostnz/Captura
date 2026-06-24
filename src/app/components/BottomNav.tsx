@@ -14,7 +14,7 @@ export default async function BottomNav() {
   const me = await db("users").where({ email: session.user.email }).first();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 border-t bg-white">
+    <nav className="fixed bottom-0 left-0 right-0 border-t bg-card">
       <div className="max-w-md mx-auto flex justify-around items-center h-14 text-2xl">
         <Link href="/" aria-label="Feed">🏠</Link>
         <Link href="/new" aria-label="Novo post">➕</Link>

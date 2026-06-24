@@ -64,7 +64,7 @@ export default async function NewPostPage({
       <h1 className="text-xl font-bold mb-4">Novo post</h1>
 
       {params.error && (
-        <p className="text-red-500 mb-2">Escolha um arquivo de imagem válido.</p>
+        <p className="text-destructive mb-2">Escolha um arquivo de imagem válido.</p>
       )}
 
       <form action={createPost} className="flex flex-col gap-3">
@@ -80,12 +80,12 @@ export default async function NewPostPage({
           placeholder="Escreva uma legenda..."
           className="border p-2 rounded"
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        <button type="submit" className="bg-primary text-primary-foreground p-2 rounded">
           Publicar
         </button>
       </form>
 
-      <Link href="/" className="text-blue-500 text-sm mt-3 inline-block">
+      <Link href="/" className="text-primary text-sm mt-3 inline-block">
         ← voltar pro feed
       </Link>
     </div>
