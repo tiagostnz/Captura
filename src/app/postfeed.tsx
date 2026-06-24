@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { usePosts } from "@/hooks/usePosts";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
