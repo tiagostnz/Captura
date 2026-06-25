@@ -7,6 +7,8 @@ import { usePosts } from "@/hooks/usePosts";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
+import Link from "next/link";
+
 
 export default function PostsFeed() {
   const { data: posts, isLoading, error } = usePosts();
@@ -22,8 +24,12 @@ export default function PostsFeed() {
       {posts.map((post: any) => (
         <div key={post.id} className="border rounded-lg overflow-hidden bg-card">
           <div className="flex items-center gap-3 p-3">
-            <Avatar src={post.author_avatar} name={post.username} size={32} />
-            <span className="font-semibold text-sm">{post.username}</span>
+            <Link href={`/perfil/${post.username}`} className="flex items-center gap-3">
+              <Avatar src={post.author_avatar} name={post.username} size={32} />
+              <span className="font-semibold text-sm hover:underline">
+                {post.username}
+              </span>
+            </Link>
 
             {/* botão seguir — escondido nos meus próprios posts */}
             {!post.is_mine && (
