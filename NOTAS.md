@@ -104,4 +104,25 @@ CUSTOM HOOK: é uma função que junta a lógica de buscar uma coisa com um nome
 -> O CAMINHO QUE UM DADO FAZ AGORA:
 a pagina chama o usePosts -> que usa o useQuery -> que faz o fetch pro endereço /api/posts -> o arquivo do route.ts pega no banco e devolve os dados -> a tela recebe e mostra
 
-to fazendo isso em outra branch, algumas funcões principais sumiram do feed principal por enquanto, pq dps vão voltar como APIs próprias
+USEMUTATION
+- ele é mto parecido com o useQuery, a diferença é que ele só le dados, o useMutation muda (cria,apaga,edita)
+- dou pra ele a função que faz a mudança(mutationFn) e ele me devolve o .mutate() que eu chamo no clique pra disparar
+
+INVALIDATEQUERIES
+- dps que o mutation da certo, eu chamo o invalidadeQueries, que avisa tipo "esse dado já não está mais assim, ou ele tá antigo, rebusca" e o useQuery refaz sozinho
+
+API RESPONDE COM STATUS, NÃO REDIRECT
+no API REST, quando n ta logado, ele não redireciona, só responde um status tipo 401 = não foi autorizado, 400 = mandou algo inválido, 200 = é ok
+- ao mesmo tempo, a api só informa, quem decide oq fazer é o front
+
+ROTAS PROTEGIDAS (middleware.ts)
+- ele é basicamente um "porteiro" que roda antes de cada página
+- ele checa se tem cookie de sessão, se não tiver manda pro login
+- login e signup ficam públicas, o matcher exlui api e estáticos
+
+- aqui basicamente termina o pedido do caio, vou esperar ele falar se ainda preciso mudar algo
+
+SHADCN / TOKENS
+-shadcn não é uma lib normal, só copio o código do componente pro meu projeto, só edito da forma que eu quero
+- os componentes não tem cor fixa, eles usan tokens do globall css, então é definidor por mim
+- eles possuem "papéis", então um botão é um primary e um erro é destructive
