@@ -1,7 +1,6 @@
 import { auth, signOut } from "@/auth";
 import Link from "next/link";
 import PostsFeed from "./postfeed";
-import Header from "./components/Header";
 
 
 async function logout() {
@@ -18,7 +17,6 @@ export default async function Home() {
         {session ? (
           <>
             <div className="flex items-center gap-4">
-              <Link href="/new" className="font-semibold">＋ Novo post</Link>
               <span>Logado como: {session.user?.name}</span>
             </div>
             <form action={logout}>
