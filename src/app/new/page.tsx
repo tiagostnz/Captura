@@ -59,35 +59,48 @@ export default async function NewPostPage({
 }) {
   const params = await searchParams;
 
-  return (
-    <div className="max-w-md mx-auto py-6">
+    return (
+    <div className="max-w-md mx-auto py-6 px-4">
       <h1 className="text-xl font-bold mb-4">Novo post</h1>
 
-      {params.error && (
-        <p className="text-destructive mb-2">Escolha um arquivo de imagem válido.</p>
-      )}
+      <div className="bg-card border rounded-lg p-6">
+        {params.error && (
+          <p className="text-destructive text-sm mb-3">
+            Escolha um arquivo de imagem válido.
+          </p>
+        )}
 
-      <form action={createPost} className="flex flex-col gap-3">
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          required
-          className="border p-2 rounded"
-        />
-        <textarea
-          name="caption"
-          placeholder="Escreva uma legenda..."
-          className="border p-2 rounded"
-        />
-        <button type="submit" className="bg-primary text-primary-foreground p-2 rounded">
-          Publicar
-        </button>
-      </form>
+        <form action={createPost} className="flex flex-col gap-3">
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            required
+            className="w-full border rounded-md p-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-secondary file:px-3 file:py-1 file:font-semibold file:text-foreground"
+          />
+          <textarea
+            name="caption"
+            placeholder="Escreva uma legenda..."
+            rows={3}
+            className="w-full border rounded-md px-3 py-2 bg-background resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+          />
 
-      <Link href="/" className="text-primary text-sm mt-3 inline-block">
-        ← voltar pro feed
-      </Link>
+          <div className="flex gap-3 mt-1">
+            <Link
+              href="/"
+              className="flex-1 text-center border rounded-md py-2 font-semibold hover:bg-secondary"
+            >
+              Cancelar
+            </Link>
+            <button
+              type="submit"
+              className="flex-1 bg-primary text-primary-foreground rounded-md py-2 font-semibold"
+            >
+              Publicar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
