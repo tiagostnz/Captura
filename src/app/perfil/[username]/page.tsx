@@ -1,9 +1,11 @@
 "use client";
 
 import { use } from "react";
+import Link from "next/link";
 import { useProfile } from "@/hooks/useProfile";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
 import Image from "next/image";
+import Avatar from "@/app/components/Avatar";
 
 export default function PerfilPage({
   params,
@@ -23,9 +25,7 @@ export default function PerfilPage({
     <div className="max-w-md mx-auto py-6">
       {/* cabeçalho do perfil */}
       <div className="flex items-center gap-4 mb-6 px-3">
-        <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center text-2xl font-semibold">
-          {user.username[0].toUpperCase()}
-        </div>
+        <Avatar src={user.avatar_url} name={user.username} size={80} />
         <div>
           <h1 className="text-xl font-bold">@{user.username}</h1>
           <p className="text-sm">{user.name}</p>
@@ -38,8 +38,15 @@ export default function PerfilPage({
             <span><strong>{followingCount}</strong> seguindo</span>
           </div>
 
-          {/* botão seguir — só se não for meu próprio perfil */}
-          {!isMe && (
+          {/* meu perfil → Editar; perfil de outro → Seguir */}
+          {isMe ? (
+            <Link
+              href="/profile-edit"
+              className="mt-2 inline-block text-sm font-semibold border px-4 py-1 rounded hover:bg-secondary"
+            >
+              Editar perfil
+            </Link>
+          ) : (
             <button
               onClick={() => toggleFollow(user.id)}
               className="mt-2 text-sm font-semibold text-primary-foreground bg-primary px-4 py-1 rounded"

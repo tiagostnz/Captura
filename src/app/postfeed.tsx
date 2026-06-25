@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Heart } from "lucide-react";
+import Avatar from "@/app/components/Avatar";
 import { usePosts } from "@/hooks/usePosts";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
@@ -21,9 +22,7 @@ export default function PostsFeed() {
       {posts.map((post: any) => (
         <div key={post.id} className="border rounded-lg overflow-hidden bg-card">
           <div className="flex items-center gap-3 p-3">
-            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm font-semibold">
-              {post.username[0].toUpperCase()}
-            </div>
+            <Avatar src={post.author_avatar} name={post.username} size={32} />
             <span className="font-semibold text-sm">{post.username}</span>
 
             {/* botão seguir — escondido nos meus próprios posts */}

@@ -120,6 +120,12 @@ ROTAS PROTEGIDAS (middleware.ts)
 - ele checa se tem cookie de sessão, se não tiver manda pro login
 - login e signup ficam públicas, o matcher exlui api e estáticos
 
+ele tem um padrão, que é:
+- o GET que le os dados atuais do banco e devolve em json e entrega a informação
+- o HOOK que é só o mensageiro pro front. ele usa o useQuery pra chamar o get e entregar os dados prontos, a página n fala com o endpoint direto, fala com o hook
+- e a PÁGINA DE EDIÇÃO que pré-preenche os campos com os seus dados atuais (vindos do hook)
+e tem o botão salvar que dispara uma mutation pra gravar as mudanças
+
 - aqui basicamente termina o pedido do caio, vou esperar ele falar se ainda preciso mudar algo
 
 SHADCN / TOKENS

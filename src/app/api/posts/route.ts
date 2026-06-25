@@ -17,9 +17,10 @@ export async function GET() {
         "posts.caption",
         "users.username",
         "users.id as author_id",
+        "users.avatar_url as author_avatar",
     )
     .count("likes.id as likes_count")
-    .groupBy("posts.id", "users.username", "users.id")
+    .groupBy("posts.id", "users.username", "users.id", "users.avatar_url")
     .orderBy("posts.created_at", "desc");
 
     const myLikedPostsId = me

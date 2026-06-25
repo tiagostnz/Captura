@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Avatar from "@/app/components/Avatar";
 import { useSearchUsers } from "@/hooks/useSearchUsers";
 
 export default function BuscarPage() {
@@ -27,9 +28,7 @@ export default function BuscarPage() {
             href={`/perfil/${user.username}`}
             className="flex items-center gap-3 p-2 rounded-md hover:bg-secondary"
           >
-            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center font-semibold">
-              {user.username[0].toUpperCase()}
-            </div>
+            <Avatar src={user.avatar_url} name={user.username} size={40} />
             <div>
               <p className="font-semibold text-sm">@{user.username}</p>
               <p className="text-sm text-muted-foreground">{user.name}</p>
