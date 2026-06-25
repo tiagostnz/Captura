@@ -37,7 +37,7 @@ export default function PostsFeed() {
             )}
           </div>
 
-          <img src={post.image_url} alt={post.caption} className="w-full" />
+          <Image src={post.image_url} alt={post.caption} className="w-full" width={400} height={400} />
 
           {/* coração + contagem */}
           <div className="px-3 pt-3">

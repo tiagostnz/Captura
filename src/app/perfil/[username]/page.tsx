@@ -3,6 +3,7 @@
 import { use } from "react";
 import { useProfile } from "@/hooks/useProfile";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
+import Image from "next/image";
 
 export default function PerfilPage({
   params,
@@ -52,11 +53,13 @@ export default function PerfilPage({
       {/* grade de posts (3 colunas) */}
       <div className="grid grid-cols-3 gap-1">
         {posts.map((post: any) => (
-          <img
+          <Image
             key={post.id}
             src={post.image_url}
             alt={post.caption}
             className="w-full aspect-square object-cover"
+            width={300}
+            height={300}
           />
         ))}
       </div>
