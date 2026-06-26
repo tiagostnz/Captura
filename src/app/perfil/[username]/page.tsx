@@ -23,6 +23,7 @@ export default function PerfilPage({
 
   return (
     <div className="max-w-md mx-auto py-6">
+  
       {/* cabeçalho do perfil */}
       <div className="flex items-center gap-4 mb-6 px-3">
         <Avatar src={user.avatar_url} name={user.username} size={80} />
@@ -60,14 +61,15 @@ export default function PerfilPage({
       {/* grade de posts (3 colunas) */}
       <div className="grid grid-cols-3 gap-1">
         {posts.map((post: any) => (
-          <Image
-            key={post.id}
-            src={post.image_url}
-            alt={post.caption}
-            className="w-full aspect-square object-cover"
-            width={300}
-            height={300}
-          />
+          <Link key={post.id} href={`/post/${post.id}`}>
+            <Image
+              src={post.image_url}
+              alt={post.caption}
+              className="w-full aspect-square object-cover"
+              width={300}
+              height={300}
+            />
+          </Link>
         ))}
       </div>
     </div>
