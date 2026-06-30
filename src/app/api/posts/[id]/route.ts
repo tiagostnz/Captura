@@ -2,6 +2,30 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+// apaga o post — SÓ se ele for do usuário logado (defesa contra IDOR)
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: "não autorizado" }, { status: 401 });
+  }
+  const me = await db("users").where({ email: session.user.email }).first();
+  const { id } = await params;
+  const postId = Number(id);
+
+  // o user_id no where é a trava: se o post não for SEU, nada é apagado
+  const deleted = await db("posts").where({ id: postId, user_id: me.id }).del();
+
+  if (deleted === 0) {
+    // não existe OU não é seu (não revelamos qual) → 404
+    return NextResponse.json({ error: "post não encontrado" }, { status: 404 });
+  }
+
+  return NextResponse.json({ ok: true });
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }

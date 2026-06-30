@@ -3,17 +3,21 @@
 import { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import Avatar from "@/app/components/Avatar";
 import { usePost } from "@/hooks/usePost";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
+import { useDeletePost } from "@/hooks/useDeletePost";
 
 export default function PostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const router = useRouter();
   const { data: post, isLoading, error } = usePost(id);
   const { mutate: toggleLike } = useToggleLike();
   const { mutate: addComment } = useAddComment();
+  const { mutate: deletePost } = useDeletePost();
 
   if (isLoading) return <p className="text-center py-6">Carregando...</p>;
   if (error || !post) return <p className="text-center py-6">Post não encontrado.</p>;
@@ -21,11 +25,26 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   return (
     <div className="max-w-md mx-auto py-6">
       <div className="border rounded-lg overflow-hidden bg-card">
-        {/* autor (linka pro perfil) */}
-        <Link href={`/perfil/${post.username}`} className="flex items-center gap-3 p-3">
-          <Avatar src={post.author_avatar} name={post.username} size={32} />
-          <span className="font-semibold text-sm hover:underline">{post.username}</span>
-        </Link>
+        {/* autor (linka pro perfil) + excluir (só se for meu) */}
+        <div className="flex items-center p-3">
+          <Link href={`/perfil/${post.username}`} className="flex items-center gap-3">
+            <Avatar src={post.author_avatar} name={post.username} size={32} />
+            <span className="font-semibold text-sm hover:underline">{post.username}</span>
+          </Link>
+
+          {post.is_mine && (
+            <button
+              onClick={() => {
+                if (confirm("Excluir este post?")) {
+                  deletePost(post.id, { onSuccess: () => router.push("/") });
+                }
+              }}
+              className="ml-auto text-destructive text-sm font-semibold"
+            >
+              Excluir
+            </button>
+          )}
+        </div>
 
         <Image src={post.image_url} alt={post.caption} width={400} height={400} className="w-full" />
 
