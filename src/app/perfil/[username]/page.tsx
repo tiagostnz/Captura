@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useProfile } from "@/hooks/useProfile";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
 import Image from "next/image";
+import { Loader } from "@/components/ui/loader";
 import Avatar from "@/app/components/Avatar";
 
 export default function PerfilPage({
@@ -16,7 +17,12 @@ export default function PerfilPage({
   const { data, isLoading, error } = useProfile(username);
   const { mutate: toggleFollow } = useToggleFollow();
 
-  if (isLoading) return <p className="text-center py-6">Carregando...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-[70vh] text-primary">
+        <Loader />
+      </div>
+    );
   if (error || !data) return <p className="text-center py-6">Perfil não encontrado.</p>;
 
   const { user, posts, followersCount, followingCount, isMe, isFollowing } = data;

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import Avatar from "@/app/components/Avatar";
+import { Loader } from "@/components/ui/loader";
 import { usePost } from "@/hooks/usePost";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
@@ -19,7 +20,12 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   const { mutate: addComment } = useAddComment();
   const { mutate: deletePost } = useDeletePost();
 
-  if (isLoading) return <p className="text-center py-6">Carregando...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-[70vh] text-primary">
+        <Loader />
+      </div>
+    );
   if (error || !post) return <p className="text-center py-6">Post não encontrado.</p>;
 
   return (

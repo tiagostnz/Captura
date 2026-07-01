@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import Avatar from "@/app/components/Avatar";
+import { Loader } from "@/components/ui/loader";
 import { usePosts } from "@/hooks/usePosts";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
@@ -16,7 +17,12 @@ export default function PostsFeed() {
   const { mutate: addComment } = useAddComment();
   const { mutate: toggleFollow } = useToggleFollow();
 
-  if (isLoading) return <p className="text-center">Carregando...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-[70vh] text-primary">
+        <Loader />
+      </div>
+    );
   if (error) return <p className="text-center text-destructive">Deu erro 😕</p>;
 
   return (

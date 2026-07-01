@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Avatar from "@/app/components/Avatar";
 import { useSearchUsers } from "@/hooks/useSearchUsers";
+import { Loader } from "@/components/ui/loader";
 
 export default function BuscarPage() {
   const [q, setQ] = useState("");
@@ -20,7 +21,11 @@ export default function BuscarPage() {
       />
 
       <div className="mt-4 flex flex-col gap-2">
-        {isLoading && <p className="text-sm text-muted-foreground">Buscando...</p>}
+        {isLoading && (
+          <div className="flex justify-center py-4 text-primary">
+            <Loader />
+          </div>
+        )}
 
         {users?.map((user: any) => (
           <Link

@@ -123,4 +123,16 @@
   html {
     @apply font-sans;
   }
+  /* hover/clique suave em todos os botões e links */
+  button,
+  a {
+    @apply transition;
+  }
+  button:hover,
+  a:hover {
+    @apply opacity-80;
+  }
+  button:active {
+    @apply scale-95;
+  }
 }

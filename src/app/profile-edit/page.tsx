@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useMe } from "@/hooks/useMe";
 import { useUpdateProfile } from "@/hooks/useUpdateProfile";
 import { useUpdateAvatar } from "@/hooks/useUpdateAvatar";
+import { Loader } from "@/components/ui/loader";
 
 export default function EditarPerfilPage() {
   const router = useRouter();
@@ -11,7 +12,12 @@ export default function EditarPerfilPage() {
   const { mutate: updateProfile, isPending, error } = useUpdateProfile();
   const { mutate: updateAvatar, isPending: isUpdatingAvatar } = useUpdateAvatar();
 
-  if (isLoading) return <p className="text-center py-6">Carregando...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-[70vh] text-primary">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="max-w-md mx-auto py-6 px-4">
