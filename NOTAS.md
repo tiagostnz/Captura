@@ -132,3 +132,20 @@ SHADCN / TOKENS
 -shadcn não é uma lib normal, só copio o código do componente pro meu projeto, só edito da forma que eu quero
 - os componentes não tem cor fixa, eles usan tokens do globall css, então é definidor por mim
 - eles possuem "papéis", então um botão é um primary e um erro é destructive
+
+EMPACOTAMENTO:
+- pra começar, a ideia vale pros 2, pegam o front e transformam em um app funcional, seja pra desktop ou celular
+- nenhum dos dois roda o backend dentro do app, tanto o banco quanto a API continuam em um servidor a parte, o app só carrega o front, que conversa pela API pela rede
+por isso é bom ter o back e o front separados
+
+ELECTRON:
+-ele serve para transformar o app web em um programa de computador
+- ele basicamente abre uma janela que por dentro é um navegador e essa janela só carrega o meu app
+- é util pq é leve
+- o processo que acontece na main cria a janela
+
+CAPACITOR:
+- ele é na mesma pegada, mas para mobile
+- ele empacota o front num app nativo, em um teste, ele aponta pro app rodando via server.url
+- ele é meio pesado, então precisa do Android Studio + sdk do android + emulador
+- a função que cria a pasta android e coloca mto arquivo, ainda n sei se coloco pro git ignorar ou n 
