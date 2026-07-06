@@ -27,7 +27,7 @@ export default function BuscarPage() {
           </div>
         )}
 
-        {users?.map((user: any) => (
+        {users?.map((user) => (
           <Link
             key={user.id}
             href={`/perfil/${user.username}`}

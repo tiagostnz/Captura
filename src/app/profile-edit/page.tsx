@@ -12,7 +12,7 @@ export default function EditarPerfilPage() {
   const { mutate: updateProfile, isPending, error } = useUpdateProfile();
   const { mutate: updateAvatar, isPending: isUpdatingAvatar } = useUpdateAvatar();
 
-  if (isLoading)
+  if (isLoading || !me)
     return (
       <div className="flex justify-center items-center min-h-[70vh] text-primary">
         <Loader />

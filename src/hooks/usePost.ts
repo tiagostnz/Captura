@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import type { Post } from "@/types";
 
 export function usePost(id: string) {
-  return useQuery({
+  return useQuery<Post>({
     queryKey: ["post", id],
     queryFn: async () => {
       const res = await fetch(`/api/posts/${id}`);

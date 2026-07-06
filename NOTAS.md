@@ -149,3 +149,11 @@ CAPACITOR:
 - ele empacota o front num app nativo, em um teste, ele aponta pro app rodando via server.url
 - ele é meio pesado, então precisa do Android Studio + sdk do android + emulador
 - a função que cria a pasta android e coloca mto arquivo, ainda n sei se coloco pro git ignorar ou n 
+
+ANY NO PROJETO:
+- o any desliga a checagem de tipo naquele ponto
+-então, na hora de uma pesquisa, ele n identifica oq é, mas também não avisa o erro
+- tirando o any acabo facilitando mto a minha vida
+- ganho a opção do autocomplete, por exemplo, se eu digito post. o editor lista os campos, logo n preciso decorar nem voltar no endpoint pra lembrar os nomes
+- além do fato que consigo pegar o erro na hora de escrever, n em runtime, o ts acende em vermelho todos os lugares que quebram
+- sem tipo, teria que caçar tudo na mão e torcer pra n esquecer nada

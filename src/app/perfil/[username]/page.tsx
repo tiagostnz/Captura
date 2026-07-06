@@ -66,7 +66,7 @@ export default function PerfilPage({
 
       {/* grade de posts (3 colunas) */}
       <div className="grid grid-cols-3 gap-1">
-        {posts.map((post: any) => (
+        {posts.map((post) => (
           <Link key={post.id} href={`/post/${post.id}`}>
             <Image
               src={post.image_url}

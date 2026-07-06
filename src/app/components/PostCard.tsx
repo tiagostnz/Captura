@@ -8,12 +8,13 @@ import { useToggleLike } from "@/hooks/useToggleLike";
 import { useAddComment } from "@/hooks/useAddComment";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
 import { useDeletePost } from "@/hooks/useDeletePost";
+import type { Post } from "@/types";
 
 export default function PostCard({
   post,
   onDeleted,
 }: {
-  post: any;
+  post: Post;
   onDeleted?: () => void; // o detalhe passa um redirect; o feed não passa nada
 }) {
   const { mutate: toggleLike } = useToggleLike();
@@ -69,7 +70,7 @@ export default function PostCard({
 
       {/* comentários */}
       <div className="px-3 py-3 text-sm">
-        {post.comments.map((c: any) => (
+        {post.comments.map((c) => (
           <p key={c.id}>
             <span className="font-semibold mr-2">{c.username}</span>
             {c.content}

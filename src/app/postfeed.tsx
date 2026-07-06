@@ -17,7 +17,7 @@ export default function PostsFeed() {
 
   return (
     <div className="max-w-md mx-auto flex flex-col gap-6">
-      {posts.map((post: any) => (
+      {posts?.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
     </div>
