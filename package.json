@@ -7,10 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "knex": "tsx node_modules/knex/bin/cli.js"
+    "knex": "tsx node_modules/knex/bin/cli.js",
+    "electron": "electron electron/main.js --no-sandbox --disable-gpu --ozone-platform=x11"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
+    "@capacitor/android": "^7.6.7",
+    "@capacitor/cli": "^7.6.7",
+    "@capacitor/core": "^7.6.7",
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.100.9",
     "bcryptjs": "^3.0.3",
@@ -39,6 +43,7 @@
     "@types/node": "25.8.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "electron": "^41.7.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "jest": "^30.3.0",

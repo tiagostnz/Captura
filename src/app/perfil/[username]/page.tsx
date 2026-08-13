@@ -1,8 +1,12 @@
 "use client";
 
 import { use } from "react";
+import Link from "next/link";
 import { useProfile } from "@/hooks/useProfile";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
+import Image from "next/image";
+import { Loader } from "@/components/ui/loader";
+import Avatar from "@/app/components/Avatar";
 
 export default function PerfilPage({
   params,
@@ -13,22 +17,26 @@ export default function PerfilPage({
   const { data, isLoading, error } = useProfile(username);
   const { mutate: toggleFollow } = useToggleFollow();
 
-  if (isLoading) return <p className="text-center py-6">Carregando...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-[70vh] text-primary">
+        <Loader />
+      </div>
+    );
   if (error || !data) return <p className="text-center py-6">Perfil não encontrado.</p>;
 
   const { user, posts, followersCount, followingCount, isMe, isFollowing } = data;
 
   return (
     <div className="max-w-md mx-auto py-6">
+  
       {/* cabeçalho do perfil */}
       <div className="flex items-center gap-4 mb-6 px-3">
-        <div className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center text-2xl font-semibold">
-          {user.username[0].toUpperCase()}
-        </div>
+        <Avatar src={user.avatar_url} name={user.username} size={80} />
         <div>
           <h1 className="text-xl font-bold">@{user.username}</h1>
           <p className="text-sm">{user.name}</p>
-          {user.bio && <p className="text-sm text-gray-600">{user.bio}</p>}
+          {user.bio && <p className="text-sm text-muted-foreground">{user.bio}</p>}
 
           {/* contadores */}
           <div className="flex gap-4 mt-2 text-sm">
@@ -37,11 +45,18 @@ export default function PerfilPage({
             <span><strong>{followingCount}</strong> seguindo</span>
           </div>
 
-          {/* botão seguir — só se não for meu próprio perfil */}
-          {!isMe && (
+          {/* meu perfil → Editar; perfil de outro → Seguir */}
+          {isMe ? (
+            <Link
+              href="/profile-edit"
+              className="mt-2 inline-block text-sm font-semibold border px-4 py-1 rounded hover:bg-secondary"
+            >
+              Editar perfil
+            </Link>
+          ) : (
             <button
               onClick={() => toggleFollow(user.id)}
-              className="mt-2 text-sm font-semibold text-white bg-blue-500 px-4 py-1 rounded"
+              className="mt-2 text-sm font-semibold text-primary-foreground bg-primary px-4 py-1 rounded"
             >
               {isFollowing ? "Seguindo" : "Seguir"}
             </button>
@@ -51,13 +66,16 @@ export default function PerfilPage({
 
       {/* grade de posts (3 colunas) */}
       <div className="grid grid-cols-3 gap-1">
-        {posts.map((post: any) => (
-          <img
-            key={post.id}
-            src={post.image_url}
-            alt={post.caption}
-            className="w-full aspect-square object-cover"
-          />
+        {posts.map((post) => (
+          <Link key={post.id} href={`/post/${post.id}`}>
+            <Image
+              src={post.image_url}
+              alt={post.caption}
+              className="w-full aspect-square object-cover"
+              width={300}
+              height={300}
+            />
+          </Link>
         ))}
       </div>
     </div>

@@ -37,7 +37,7 @@ export async function GET(
     : false;
 
   return NextResponse.json({
-    user: { id: user.id, username: user.username, name: user.name, bio: user.bio },
+    user: { id: user.id, username: user.username, name: user.name, bio: user.bio, avatar_url: user.avatar_url },
     posts,
     followersCount: followers.length,
     followingCount: following.length,

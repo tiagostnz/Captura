@@ -17,6 +17,7 @@ export function useToggleLike() {
     // deu certo? rebusca os posts pra atualizar coração/contagem
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post"] });
     },
   });
 }

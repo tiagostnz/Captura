@@ -104,4 +104,56 @@ CUSTOM HOOK: é uma função que junta a lógica de buscar uma coisa com um nome
 -> O CAMINHO QUE UM DADO FAZ AGORA:
 a pagina chama o usePosts -> que usa o useQuery -> que faz o fetch pro endereço /api/posts -> o arquivo do route.ts pega no banco e devolve os dados -> a tela recebe e mostra
 
-to fazendo isso em outra branch, algumas funcões principais sumiram do feed principal por enquanto, pq dps vão voltar como APIs próprias
+USEMUTATION
+- ele é mto parecido com o useQuery, a diferença é que ele só le dados, o useMutation muda (cria,apaga,edita)
+- dou pra ele a função que faz a mudança(mutationFn) e ele me devolve o .mutate() que eu chamo no clique pra disparar
+
+INVALIDATEQUERIES
+- dps que o mutation da certo, eu chamo o invalidadeQueries, que avisa tipo "esse dado já não está mais assim, ou ele tá antigo, rebusca" e o useQuery refaz sozinho
+
+API RESPONDE COM STATUS, NÃO REDIRECT
+no API REST, quando n ta logado, ele não redireciona, só responde um status tipo 401 = não foi autorizado, 400 = mandou algo inválido, 200 = é ok
+- ao mesmo tempo, a api só informa, quem decide oq fazer é o front
+
+ROTAS PROTEGIDAS (middleware.ts)
+- ele é basicamente um "porteiro" que roda antes de cada página
+- ele checa se tem cookie de sessão, se não tiver manda pro login
+- login e signup ficam públicas, o matcher exlui api e estáticos
+
+ele tem um padrão, que é:
+- o GET que le os dados atuais do banco e devolve em json e entrega a informação
+- o HOOK que é só o mensageiro pro front. ele usa o useQuery pra chamar o get e entregar os dados prontos, a página n fala com o endpoint direto, fala com o hook
+- e a PÁGINA DE EDIÇÃO que pré-preenche os campos com os seus dados atuais (vindos do hook)
+e tem o botão salvar que dispara uma mutation pra gravar as mudanças
+
+- aqui basicamente termina o pedido do caio, vou esperar ele falar se ainda preciso mudar algo
+
+SHADCN / TOKENS
+-shadcn não é uma lib normal, só copio o código do componente pro meu projeto, só edito da forma que eu quero
+- os componentes não tem cor fixa, eles usan tokens do globall css, então é definidor por mim
+- eles possuem "papéis", então um botão é um primary e um erro é destructive
+
+EMPACOTAMENTO:
+- pra começar, a ideia vale pros 2, pegam o front e transformam em um app funcional, seja pra desktop ou celular
+- nenhum dos dois roda o backend dentro do app, tanto o banco quanto a API continuam em um servidor a parte, o app só carrega o front, que conversa pela API pela rede
+por isso é bom ter o back e o front separados
+
+ELECTRON:
+-ele serve para transformar o app web em um programa de computador
+- ele basicamente abre uma janela que por dentro é um navegador e essa janela só carrega o meu app
+- é util pq é leve
+- o processo que acontece na main cria a janela
+
+CAPACITOR:
+- ele é na mesma pegada, mas para mobile
+- ele empacota o front num app nativo, em um teste, ele aponta pro app rodando via server.url
+- ele é meio pesado, então precisa do Android Studio + sdk do android + emulador
+- a função que cria a pasta android e coloca mto arquivo, ainda n sei se coloco pro git ignorar ou n 
+
+ANY NO PROJETO:
+- o any desliga a checagem de tipo naquele ponto
+-então, na hora de uma pesquisa, ele n identifica oq é, mas também não avisa o erro
+- tirando o any acabo facilitando mto a minha vida
+- ganho a opção do autocomplete, por exemplo, se eu digito post. o editor lista os campos, logo n preciso decorar nem voltar no endpoint pra lembrar os nomes
+- além do fato que consigo pegar o erro na hora de escrever, n em runtime, o ts acende em vermelho todos os lugares que quebram
+- sem tipo, teria que caçar tudo na mão e torcer pra n esquecer nada
